@@ -23,7 +23,7 @@ public class Main extends Application {
         root.setBottom(deleteArea.getPane());
         root.setCenter(entryArea.getAnchorPane());
         
-        primaryStage.setTitle("Hello World");
+        primaryStage.setTitle("TelephoneBook by Roland Zimmermann");
         primaryStage.setScene(new Scene(root, 500, 600));
         primaryStage.show();
     }
