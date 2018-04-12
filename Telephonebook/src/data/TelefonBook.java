@@ -5,6 +5,7 @@ import java.util.List;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 
 public class TelefonBook {
 
@@ -13,6 +14,8 @@ public class TelefonBook {
 	// Collections.unmodifiableList(new ArrayList<>());
 	private final ObservableList<TelefonEntry> observableTelefonEntrys = FXCollections
 			.observableArrayList(new ArrayList<>());
+	
+	private final FilteredList<TelefonEntry> filteredList = new FilteredList(observableTelefonEntrys);
 
 	public TelefonBook() {
 		observableTelefonEntrys.add(new TelefonEntry("Zimmermann", "Roland", "123456789"));
@@ -23,19 +26,18 @@ public class TelefonBook {
 		observableTelefonEntrys.add(new TelefonEntry());
 	}
 
-	public List<TelefonEntry> search(String string) {
-		ObservableList<TelefonEntry> list = FXCollections.observableArrayList(new ArrayList<>());
-
-		for (TelefonEntry n : observableTelefonEntrys) {
-			if (n.getFirstName().contains(string) || n.getLastName().contains(string)
-					|| n.getNumber().contains(string)) {
-				list.add(n);
-			}
-		}
-		return list;
+	public void search(String string) {
+		filteredList.setPredicate(n -> {
+			return (n.getFirstName().contains(string) || n.getLastName().contains(string)
+					|| n.getNumber().contains(string));
+		});
 	}
 
 	public ObservableList<TelefonEntry> getNumbers() {
-		return observableTelefonEntrys;
+		return filteredList;
+	}
+
+	public void removeAll(ObservableList<TelefonEntry> selectedEntries) {
+		observableTelefonEntrys.removeAll(selectedEntries);
 	}
 }

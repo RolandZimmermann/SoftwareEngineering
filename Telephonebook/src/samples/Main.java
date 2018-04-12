@@ -15,9 +15,19 @@ public class Main extends Application {
         
         TelefonBook telefonBook = new TelefonBook();
         EntryArea entryArea = new EntryArea(telefonBook.getNumbers());
-        SearchArea searchArea = new SearchArea(telefonBook, entryArea);
-        DeleteArea deleteArea = new DeleteArea(telefonBook, entryArea);
-        
+        SearchArea searchArea = new SearchArea(searchText -> {
+        	telefonBook.search(searchText);
+        	return null;
+        });
+        DeleteArea deleteArea = new DeleteArea(
+        		() -> {
+        			telefonBook.removeAll(entryArea.getSelectedEntries());
+        			return null;
+        		},  () -> { 
+        			telefonBook.createEntry();
+					return null; 
+    			}
+		);        
         
         root.setTop(searchArea.getPane());
         root.setBottom(deleteArea.getPane());
