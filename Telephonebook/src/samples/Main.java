@@ -21,7 +21,7 @@ import javafx.stage.Stage;
 import ui.EntryArea;
 
 public class Main extends Application {
-static final Path path = Paths.get("C:/Users/Roland/Desktop/test.json");
+static final Path path = Paths.get("C:/Users/geiers/Desktop/test.json");
 
 private TelefonBook telefonBook = new TelefonBook();
 	@Override
