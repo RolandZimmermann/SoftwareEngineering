@@ -28,8 +28,8 @@ public class TelefonBook {
 
 	public void search(String string) {
 		filteredList.setPredicate(n -> {
-			return (n.getFirstName().contains(string) || n.getLastName().contains(string)
-					|| n.getNumber().contains(string));
+			return (n.getFirstName().toUpperCase().contains(string.toUpperCase()) || n.getLastName().toUpperCase().contains(string.toUpperCase())
+					|| n.getNumber().toUpperCase().contains(string.toUpperCase()));
 		});
 	}
 

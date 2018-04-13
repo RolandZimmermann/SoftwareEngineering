@@ -26,6 +26,11 @@ public class Main extends Application {
         		},  () -> { 
         			telefonBook.createEntry();
 					return null; 
+    			}, () -> {
+    				JsonFactory factory = new JsonFactory();
+    				return null;
+    			}, () -> {
+    				return null;    				
     			}
 		);        
         

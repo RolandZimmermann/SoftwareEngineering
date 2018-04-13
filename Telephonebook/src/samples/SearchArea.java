@@ -21,7 +21,7 @@ public class SearchArea {
 
 		AnchorPane.setTopAnchor(textField, 10.0);
 		AnchorPane.setLeftAnchor(textField, 10.0);
-		AnchorPane.setRightAnchor(textField, 90.0);
+		AnchorPane.setRightAnchor(textField, 50.0);
 
 		AnchorPane.setRightAnchor(searchLabel, 10.0);
 		AnchorPane.setTopAnchor(searchLabel, 15.0);
@@ -55,8 +55,5 @@ public class SearchArea {
 		return anchorPane;
 	}
 	
-	private void buttonClicked(MouseEvent e) {
-		
-	}
 
 }
