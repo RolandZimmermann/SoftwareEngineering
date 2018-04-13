@@ -53,4 +53,10 @@ public class TelefonEntry {
     public boolean isNew() {
         return isNew;
     }
+
+	@Override
+	public String toString() {
+		return "TelefonEntry [lastName=" + lastName + ", firstName=" + firstName + ", number=" + number + "]";
+	}
+    
 }
