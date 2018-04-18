@@ -65,7 +65,6 @@ public class TelefonBook {
 			}
 		else
             try (InputStream is = Files.newInputStream(path)) {
-            	System.out.println("Geht");
             	TelefonBook telefonBook = new TelefonBook();
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode roots = mapper.readTree(is);
