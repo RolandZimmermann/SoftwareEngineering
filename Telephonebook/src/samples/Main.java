@@ -19,24 +19,22 @@ import ui.EntryArea;
 public class Main extends Application {
 	static Path path1 = Paths.get("src/telefonbook.json");
 	static Path path2 = Paths.get("src/telefonbook2.json");
-	
+
 	private static Path usedPath1 = path1;
 	private static Path usedPath2 = path2;
 
 	private TelefonBook telefonBook = new TelefonBook();
 	private TelefonBook telefonBook2 = new TelefonBook();
-	
-	private Pane tb1 = createTelefonBookArea(path1);
-	private Pane tb2 = createTelefonBookArea(path2);
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		BorderPane root = new BorderPane();
+		Pane tb1 = createTelefonBookArea(path1);
+		Pane tb2 = createTelefonBookArea(path2);
 
 		root.setLeft(tb1);
 		root.setCenter(tb2);
-		
-		
+
 		primaryStage.setTitle("TelephoneBook");
 		primaryStage.setScene(new Scene(root, 600, 600));
 		primaryStage.show();
@@ -74,24 +72,24 @@ public class Main extends Application {
 
 			telefonBook = TelefonBook.loadTelefonbook(path);
 			entryArea.setItems(telefonBook.getNumbers());
-			
-			root.setOnDragEntered(e-> {
+
+			root.setOnDragEntered(e -> {
 				final Dragboard dragboard = e.getDragboard();
-			    @SuppressWarnings("unchecked")
+				@SuppressWarnings("unchecked")
 				final List<File> files = (List<File>) dragboard.getContent(DataFormat.FILES);
 
-			    if (files == null || files.size() != 1) {
-			        return;
-			    }
+				if (files == null || files.size() != 1) {
+					return;
+				}
 
-			    final Path newPath = Paths.get(files.get(0).getAbsolutePath());
-			    
-			    File file = files.get(0);
-			    
-			    if(!file.getName().endsWith(".json")) {
-			    	return;
-			    }
-			
+				final Path newPath = Paths.get(files.get(0).getAbsolutePath());
+
+				File file = files.get(0);
+
+				if (!file.getName().endsWith(".json")) {
+					return;
+				}
+
 				if (file != null) {
 					telefonBook = TelefonBook.loadTelefonbook(Paths.get(file.getAbsolutePath()));
 					entryArea.setItems(telefonBook.getNumbers());
@@ -105,7 +103,7 @@ public class Main extends Application {
 
 			return root;
 		}
-		
+
 		if (path == usedPath2) {
 			BorderPane root = new BorderPane();
 
@@ -137,24 +135,24 @@ public class Main extends Application {
 
 			telefonBook2 = TelefonBook.loadTelefonbook(path);
 			entryArea.setItems(telefonBook2.getNumbers());
-			
-			root.setOnDragEntered(e-> {
+
+			root.setOnDragEntered(e -> {
 				final Dragboard dragboard = e.getDragboard();
-			    @SuppressWarnings("unchecked")
+				@SuppressWarnings("unchecked")
 				final List<File> files = (List<File>) dragboard.getContent(DataFormat.FILES);
 
-			    if (files == null || files.size() != 1) {
-			        return;
-			    }
+				if (files == null || files.size() != 1) {
+					return;
+				}
 
-			    final Path newPath = Paths.get(files.get(0).getAbsolutePath());
+				final Path newPath = Paths.get(files.get(0).getAbsolutePath());
 
-			    File file = files.get(0);
-			    
-			    if(!file.getName().endsWith(".json")) {
-			    	return;
-			    }
-			    
+				File file = files.get(0);
+
+				if (!file.getName().endsWith(".json")) {
+					return;
+				}
+
 				if (file != null) {
 					telefonBook2 = TelefonBook.loadTelefonbook(Paths.get(file.getAbsolutePath()));
 					entryArea.setItems(telefonBook2.getNumbers());
