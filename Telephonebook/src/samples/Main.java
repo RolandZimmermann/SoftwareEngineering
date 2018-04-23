@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 import ui.EntryArea;
 
 public class Main extends Application {
-	static Path path1 = Paths.get("src/telefonbook.json");
+	 static Path path1 = Paths.get("src/telefonbook.json");
 	static Path path2 = Paths.get("src/telefonbook2.json");
 
 	private static Path usedPath1 = path1;
