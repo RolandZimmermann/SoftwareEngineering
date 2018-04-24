@@ -57,7 +57,7 @@
   </class>  
   <class id="7" language="java" name="samples.Main" project="Telephonebook" file="/Telephonebook/src/samples/Main.java" 
     binary="false" corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1219" y="393"/>    
+    <position height="-1" width="-1" x="1274" y="383"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      

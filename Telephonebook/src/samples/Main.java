@@ -4,11 +4,14 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 import data.TelefonBook;
 import data.TelefonEntry;
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.layout.BorderPane;
@@ -17,7 +20,7 @@ import javafx.stage.Stage;
 import ui.EntryArea;
 
 public class Main extends Application {
-	 static Path path1 = Paths.get("src/telefonbook.json");
+	static Path path1 = Paths.get("src/telefonbook.json");
 	static Path path2 = Paths.get("src/telefonbook2.json");
 
 	private static Path usedPath1 = path1;
@@ -25,6 +28,8 @@ public class Main extends Application {
 
 	private TelefonBook telefonBook = new TelefonBook();
 	private TelefonBook telefonBook2 = new TelefonBook();
+
+	private ObservableList<TelefonEntry> copy = null;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -53,10 +58,14 @@ public class Main extends Application {
 				telefonBook.removeAll(entryArea.getSelectedEntries());
 				return null;
 			}, () -> {
-				telefonBook.createEntry(new TelefonEntry());
+				if (copy != null) {
+					telefonBook.createEntry(copy.get(0));
+					copy = null;
+				} else {
+					telefonBook.createEntry(new TelefonEntry());
+				}
 				return null;
 			}, () -> {
-
 				TelefonBook.saveTelefonbook(telefonBook, path1);
 				return null;
 			}, () -> {
@@ -67,6 +76,9 @@ public class Main extends Application {
 					entryArea.setItems(telefonBook.getNumbers());
 					path1 = Paths.get(file.getAbsolutePath());
 				}
+				return null;
+			}, () -> {
+				copy = entryArea.getSelectedEntries();
 				return null;
 			});
 
@@ -116,10 +128,14 @@ public class Main extends Application {
 				telefonBook2.removeAll(entryArea.getSelectedEntries());
 				return null;
 			}, () -> {
+				if (copy != null) {
+					telefonBook2.createEntry(copy.get(0));
+					copy = null;
+				} else {
 				telefonBook2.createEntry(new TelefonEntry());
+				}
 				return null;
 			}, () -> {
-
 				TelefonBook.saveTelefonbook(telefonBook2, path2);
 				return null;
 			}, () -> {
@@ -130,6 +146,9 @@ public class Main extends Application {
 					entryArea.setItems(telefonBook2.getNumbers());
 					path2 = Paths.get(file.getAbsolutePath());
 				}
+				return null;
+			}, () -> {
+				copy = entryArea.getSelectedEntries();
 				return null;
 			});
 
