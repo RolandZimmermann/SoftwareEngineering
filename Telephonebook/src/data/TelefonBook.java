@@ -20,6 +20,7 @@ import javafx.collections.transformation.FilteredList;
 
 public class TelefonBook {
 
+	private Path path;
 	// final == Liste kann geändert werden. nur keine neue Referenz
 	// private final List<TelefonNumber> telefonNumbers =
 	// Collections.unmodifiableList(new ArrayList<>());
@@ -28,19 +29,29 @@ public class TelefonBook {
 
 	private final FilteredList<TelefonEntry> filteredList = new FilteredList(observableTelefonEntrys);
 
-	public TelefonBook() {
+	public TelefonBook(Path path) {
 //		observableTelefonEntrys.add(new TelefonEntry("Zimmermann", "Roland", "123456789"));
 //		observableTelefonEntrys.add(new TelefonEntry("Zimmermann", "Roland 2", "987654321"));
+		this.path = path;
+		this.load();
+	}
+	public TelefonBook() {
+		
 	}
 
-	public static void saveTelefonbook(TelefonBook telefonBook, Path path) {
+	public void save() {
+		this.saveAs(this.path);
+	}
+	
+	public void saveAs(Path path) {
+		this.path = path;
 		 JsonFactory factory = new JsonFactory();
          try (OutputStream os = Files.newOutputStream(path); 
         		 JsonGenerator jg = factory.createGenerator(os)) {
              // Verwenden Sie jg um fuer jeden Eintrag im Telefonbuch
              // entsprechende Objekte im JSON zu erzeugen
              jg.writeStartArray();
-             for (TelefonEntry e : telefonBook.getAllEntrysAsArray()) {
+             for (TelefonEntry e : this.getAllEntrysAsArray()) {
                  jg.writeStartObject();
                  jg.writeStringField("LastName", e.getLastName());
                  jg.writeStringField("FirstName", e.getFirstName());
@@ -54,31 +65,33 @@ public class TelefonBook {
          }
 	}
 	
-	public static TelefonBook loadTelefonbook(Path path) {
+	public void load() {
+		this.loadFrom(this.path);
+	}
+	
+	public void loadFrom(Path path) {
+		this.path = path;
+		this.observableTelefonEntrys.clear();
 		if (!Files.exists(path, LinkOption.NOFOLLOW_LINKS))
 			try {
 				Files.createFile(path);
-				return new TelefonBook();
 			} catch (IOException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		else
             try (InputStream is = Files.newInputStream(path)) {
-            	TelefonBook telefonBook = new TelefonBook();
                 ObjectMapper mapper = new ObjectMapper();
                 JsonNode roots = mapper.readTree(is);
                 // Verwenden Sie den ObjectMapper hier , um
                 // die Daten aus der Datei auszulesen.
                 for (JsonNode j : roots) {
-                    telefonBook.createEntry(new TelefonEntry(j.path("LastName").asText(), j.path("FirstName").asText(),
+                    this.createEntry(new TelefonEntry(j.path("LastName").asText(), j.path("FirstName").asText(),
                             j.path("Number").asText()));
                 }
-                return telefonBook;
             } catch (IOException e) {
                 e.printStackTrace();
             }
-		return null;
 	}
 
 

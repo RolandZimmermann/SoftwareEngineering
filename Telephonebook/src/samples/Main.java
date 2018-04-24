@@ -10,24 +10,21 @@ import data.TelefonBook;
 import data.TelefonEntry;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
+import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import ui.EntryArea;
 
 public class Main extends Application {
-	static Path path1 = Paths.get("src/telefonbook.json");
-	static Path path2 = Paths.get("src/telefonbook2.json");
-
-	private static Path usedPath1 = path1;
-	private static Path usedPath2 = path2;
-
-	private TelefonBook telefonBook = new TelefonBook();
-	private TelefonBook telefonBook2 = new TelefonBook();
+	static final Path path1 = Paths.get("src/telefonbook.json");
+	static final Path path2 = Paths.get("src/telefonbook2.json");
 
 	private ObservableList<TelefonEntry> copy = null;
 
@@ -46,146 +43,99 @@ public class Main extends Application {
 	}
 
 	private Pane createTelefonBookArea(Path path) {
-		if (path == usedPath1) {
-			BorderPane root = new BorderPane();
+		BorderPane root = new BorderPane();
 
-			EntryArea entryArea = new EntryArea(telefonBook.getNumbers());
-			SearchArea searchArea = new SearchArea(searchText -> {
-				telefonBook.search(searchText);
-				return null;
-			});
-			DeleteArea deleteArea = new DeleteArea(() -> {
-				telefonBook.removeAll(entryArea.getSelectedEntries());
-				return null;
-			}, () -> {
-				if (copy != null) {
-					telefonBook.createEntry(copy.get(0));
-					copy = null;
-				} else {
-					telefonBook.createEntry(new TelefonEntry());
-				}
-				return null;
-			}, () -> {
-				TelefonBook.saveTelefonbook(telefonBook, path1);
-				return null;
-			}, () -> {
-				FileLoader fileLoader = new FileLoader(new Stage());
-				File file = fileLoader.chooseFile();
-				if (file != null) {
-					telefonBook = TelefonBook.loadTelefonbook(Paths.get(file.getAbsolutePath()));
-					entryArea.setItems(telefonBook.getNumbers());
-					path1 = Paths.get(file.getAbsolutePath());
-				}
-				return null;
-			}, () -> {
-				copy = entryArea.getSelectedEntries();
-				return null;
-			});
+		TelefonBook telefonBook = new TelefonBook(path);
 
-			telefonBook = TelefonBook.loadTelefonbook(path);
-			entryArea.setItems(telefonBook.getNumbers());
+		EntryArea entryArea = new EntryArea(telefonBook.getNumbers());
+		entryArea.setItems(telefonBook.getNumbers());
+		SearchArea searchArea = new SearchArea(searchText -> {
+			telefonBook.search(searchText);
+			return null;
+		});
+		DeleteArea deleteArea = new DeleteArea(() -> {
+			telefonBook.removeAll(entryArea.getSelectedEntries());
+			return null;
+		}, () -> {
+			if (copy != null) {
+				telefonBook.createEntry(copy.get(0));
+				copy = null;
+			} else {
+				telefonBook.createEntry(new TelefonEntry());
+			}
+			return null;
+		}, () -> {
+			telefonBook.save();
+			return null;
+		}, () -> {
+			FileLoader fileLoader = new FileLoader(new Stage());
+			File file = fileLoader.chooseFile();
+			if (file != null) {
+				telefonBook.loadFrom(Paths.get(file.getAbsolutePath()));
+			}
+			return null;
+		}, () -> {
+			copy = entryArea.getSelectedEntries();
+			return null;
+		});
+		
+		//another Way to implement lambda expressions
+//		root.setOnDragEntered(new EventHandler<DragEvent>() {
+//
+//			@Override
+//			public void handle(DragEvent e) {
+//				File file = getFileFromDraggedEvent(e);
+//
+//				if (file == null || !file.getName().endsWith(".json")) {
+//					return;
+//				}
+//
+//				e.acceptTransferModes(TransferMode.LINK);
+//			}
+//			
+//		});
+//		
+		root.setOnDragEntered(e -> {
+			File file = getFileFromDraggedEvent(e);
 
-			root.setOnDragEntered(e -> {
-				final Dragboard dragboard = e.getDragboard();
-				@SuppressWarnings("unchecked")
-				final List<File> files = (List<File>) dragboard.getContent(DataFormat.FILES);
+			if (file == null || !file.getName().endsWith(".json")) {
+				return;
+			}
 
-				if (files == null || files.size() != 1) {
-					return;
-				}
+			e.acceptTransferModes(TransferMode.LINK);
+		});
+		
+		root.setOnDragOver(e -> {
+			e.acceptTransferModes(TransferMode.LINK);
+		});
 
-				final Path newPath = Paths.get(files.get(0).getAbsolutePath());
+		root.setOnDragDropped(e -> {
+			File file = getFileFromDraggedEvent(e);
+			if (file != null) {
+				telefonBook.loadFrom((Paths.get(file.getAbsolutePath())));
+			}
+		});
 
-				File file = files.get(0);
+		root.setTop(searchArea.getPane());
+		root.setBottom(deleteArea.getPane());
+		root.setCenter(entryArea.getAnchorPane());
 
-				if (!file.getName().endsWith(".json")) {
-					return;
-				}
+		return root;
+	}
 
-				if (file != null) {
-					telefonBook = TelefonBook.loadTelefonbook(Paths.get(file.getAbsolutePath()));
-					entryArea.setItems(telefonBook.getNumbers());
-					path1 = newPath;
-				}
-			});
+	private File getFileFromDraggedEvent(DragEvent e) {
+		final Dragboard dragboard = e.getDragboard();
+		@SuppressWarnings("unchecked")
+		final List<File> files = (List<File>) dragboard.getContent(DataFormat.FILES);
 
-			root.setTop(searchArea.getPane());
-			root.setBottom(deleteArea.getPane());
-			root.setCenter(entryArea.getAnchorPane());
-
-			return root;
+		if (files == null || files.size() != 1) {
+			return null;
 		}
 
-		if (path == usedPath2) {
-			BorderPane root = new BorderPane();
+		final Path newPath = Paths.get(files.get(0).getAbsolutePath());
 
-			EntryArea entryArea = new EntryArea(telefonBook2.getNumbers());
-			SearchArea searchArea = new SearchArea(searchText -> {
-				telefonBook2.search(searchText);
-				return null;
-			});
-			DeleteArea deleteArea = new DeleteArea(() -> {
-				telefonBook2.removeAll(entryArea.getSelectedEntries());
-				return null;
-			}, () -> {
-				if (copy != null) {
-					telefonBook2.createEntry(copy.get(0));
-					copy = null;
-				} else {
-				telefonBook2.createEntry(new TelefonEntry());
-				}
-				return null;
-			}, () -> {
-				TelefonBook.saveTelefonbook(telefonBook2, path2);
-				return null;
-			}, () -> {
-				FileLoader fileLoader = new FileLoader(new Stage());
-				File file = fileLoader.chooseFile();
-				if (file != null) {
-					telefonBook2 = TelefonBook.loadTelefonbook(Paths.get(file.getAbsolutePath()));
-					entryArea.setItems(telefonBook2.getNumbers());
-					path2 = Paths.get(file.getAbsolutePath());
-				}
-				return null;
-			}, () -> {
-				copy = entryArea.getSelectedEntries();
-				return null;
-			});
-
-			telefonBook2 = TelefonBook.loadTelefonbook(path);
-			entryArea.setItems(telefonBook2.getNumbers());
-
-			root.setOnDragEntered(e -> {
-				final Dragboard dragboard = e.getDragboard();
-				@SuppressWarnings("unchecked")
-				final List<File> files = (List<File>) dragboard.getContent(DataFormat.FILES);
-
-				if (files == null || files.size() != 1) {
-					return;
-				}
-
-				final Path newPath = Paths.get(files.get(0).getAbsolutePath());
-
-				File file = files.get(0);
-
-				if (!file.getName().endsWith(".json")) {
-					return;
-				}
-
-				if (file != null) {
-					telefonBook2 = TelefonBook.loadTelefonbook(Paths.get(file.getAbsolutePath()));
-					entryArea.setItems(telefonBook2.getNumbers());
-					path2 = newPath;
-				}
-			});
-
-			root.setTop(searchArea.getPane());
-			root.setBottom(deleteArea.getPane());
-			root.setCenter(entryArea.getAnchorPane());
-
-			return root;
-		}
-		return null;
+		File file = files.get(0);
+		return file;
 	}
 
 	public static void main(String[] args) {
