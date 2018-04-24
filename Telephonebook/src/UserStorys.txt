@@ -1,0 +1,13 @@
+UserStorys TelefonBook:
+
+Als User möchte ich alle Einträge des Adressbuchs einsehen.
+Als User möchte ich neue Einträge anlegen.
+Als User möchte ich vorhandene Einträge löschen.
+Als User möchte ich vorhandene Einträge bearbeiten.
+Als User möchte ich nach Einträgen komfortabel suchen.
+
+Als User möchte ich meine Einträge speichern.
+Als User möchte ich Einträge laden.
+
+Als User möchte ich an mehreren Telefonbüchern arbeiten.
+Als User möchte ich per Drag and Drop Telefonbücher laden.

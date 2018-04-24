@@ -1,0 +1,37 @@
+Klasse:
+
+	Eine Klasse beinhaltet Daten, die als Attribute bezeichnet werden,
+	und Methoden, die diese bearbeiten. Eine öffentliche Klasse ist immer
+	in einer eigenen Datei definiert, deren Namen aus dem der Klasse 
+	und der Erweiterung .java zusammengesetzt ist. Nach der Übersetzung 
+	durch den Compiler hat das Ergebnis die Extension .class. 
+
+
+Schnittstelle:
+
+	Schnittstellen sind wichtige Hilfsmittel bei Entwurf komplexer 
+	Softwaresysteme.
+	Sie erlauben es unterschiedliche Subsysteme definiert zu koppeln (Coupling).
+	Schnittstellen unterstützen das Konzept des Information Hiding und sollten 
+	möglichst stabil sein. Stabile Schnittstellen erlauben es mehreren Teams 
+	unabhängig von einander zu arbeiten. Sie erlauben eine Trennung von
+
+    	Spezifikation und
+    	Implementierung
+
+	Schnittstellen (engl. Interfaces) sind ein wichtiges Sprachmittel beim 
+	Entwurf von Softwaresystemen.
+
+	Sie enthalten daher nur die für die Spezifikation wichtige Elemente:
+
+    	Methodendeklarationen
+    	öffentliche Attribute
+    	
+    	
+Objekte:
+
+	Ein Objekt (auch Instanz genannt) bezeichnet in der objektorientierten
+	Programmierung (OOP) ein Exemplar eines bestimmten Datentyps oder einer
+	bestimmten Klasse (auch „Objekttyp“ genannt). Objekte sind konkrete
+   	Ausprägungen („Instanzen“) eines Objekttyps und werden während der 
+   	Laufzeit erzeugt (Instanziierung).

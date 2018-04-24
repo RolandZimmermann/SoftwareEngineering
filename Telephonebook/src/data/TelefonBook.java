@@ -33,7 +33,7 @@ public class TelefonBook {
 //		observableTelefonEntrys.add(new TelefonEntry("Zimmermann", "Roland 2", "987654321"));
 	}
 
-	public static void SaveTelefonbook(TelefonBook telefonBook, Path path) {
+	public static void saveTelefonbook(TelefonBook telefonBook, Path path) {
 		 JsonFactory factory = new JsonFactory();
          try (OutputStream os = Files.newOutputStream(path); 
         		 JsonGenerator jg = factory.createGenerator(os)) {

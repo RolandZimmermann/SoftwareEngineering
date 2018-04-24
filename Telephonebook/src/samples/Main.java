@@ -57,7 +57,7 @@ public class Main extends Application {
 				return null;
 			}, () -> {
 
-				TelefonBook.SaveTelefonbook(telefonBook, path1);
+				TelefonBook.saveTelefonbook(telefonBook, path1);
 				return null;
 			}, () -> {
 				FileLoader fileLoader = new FileLoader(new Stage());
@@ -120,7 +120,7 @@ public class Main extends Application {
 				return null;
 			}, () -> {
 
-				TelefonBook.SaveTelefonbook(telefonBook2, path2);
+				TelefonBook.saveTelefonbook(telefonBook2, path2);
 				return null;
 			}, () -> {
 				FileLoader fileLoader = new FileLoader(new Stage());
