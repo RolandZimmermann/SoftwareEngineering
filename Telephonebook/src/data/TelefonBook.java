@@ -46,7 +46,7 @@ public class TelefonBook {
 	public void saveAs(Path path) {
 		this.path = path;
 		 JsonFactory factory = new JsonFactory();
-         try (OutputStream os = Files.newOutputStream(path); 
+         try (OutputStream os = Files.newOutputStream(path);
         		 JsonGenerator jg = factory.createGenerator(os)) {
              // Verwenden Sie jg um fuer jeden Eintrag im Telefonbuch
              // entsprechende Objekte im JSON zu erzeugen
